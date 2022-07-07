@@ -2,10 +2,10 @@ import {
     Column, Entity, OneToMany,
 } from 'typeorm';
 
+import { AlreadyRead } from './already-read.entity';
 import { RoleEnum } from '../enums';
 import { CommonsFields } from './commons-fields.entity';
 import { Comments } from './comments.entity';
-import { AlreadyRead } from './already-read.entity';
 import { Favorites } from './favorites.entity';
 import { Ratings } from './ratings.entity';
 import { WillRead } from './will-read.entity';
@@ -16,7 +16,7 @@ export class Users extends CommonsFields {
         name: 'nickName',
         type: 'varchar',
         unique: true,
-        length: 50,
+        width: 50,
         nullable: false,
     })
         nickName: string;
@@ -36,7 +36,7 @@ export class Users extends CommonsFields {
         width: 255,
         nullable: false,
     })
-        email :string;
+        email: string;
 
     @Column({
         name: 'role',
@@ -56,18 +56,18 @@ export class Users extends CommonsFields {
     })
         avatar?: string;
 
-    @OneToMany(() => Comments, (comments) => comments.user)
-        comments: Comments[];
-
     @OneToMany(() => AlreadyRead, (alreadyRead) => alreadyRead.user)
         alreadyRead: AlreadyRead[];
 
-    @OneToMany(() => WillRead, (willRead) => willRead.user)
-        willRead: WillRead[];
+    @OneToMany(() => Comments, (comments) => comments.user)
+        comments: Comments[];
+
+    @OneToMany(() => Ratings, (ratings) => ratings.user)
+        ratings: Ratings[];
 
     @OneToMany(() => Favorites, (favorites) => favorites.user)
         favorites: Favorites[];
 
-    @OneToMany(() => Ratings, (ratings) => ratings.user)
-        ratings: Ratings[];
+    @OneToMany(() => WillRead, (willRead) => willRead.user)
+        willRead: WillRead[];
 }

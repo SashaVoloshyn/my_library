@@ -17,6 +17,6 @@ export const AppDataSource = new DataSource({
     ],
     subscribers: [],
     entities: [
-        './src/entities/**/*.entities.ts',
+        './src/entities/**/*.entity.ts',
     ],
 });

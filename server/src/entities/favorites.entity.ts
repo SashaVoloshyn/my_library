@@ -2,9 +2,9 @@ import {
     Column, Entity, JoinColumn, ManyToOne,
 } from 'typeorm';
 
-import { Users } from './users.entity';
 import { Books } from './books.entity';
 import { CommonsFields } from './commons-fields.entity';
+import { Users } from './users.entity';
 
 @Entity()
 export class Favorites extends CommonsFields {
@@ -22,11 +22,11 @@ export class Favorites extends CommonsFields {
     })
         bookId: number;
 
-    @ManyToOne(() => Users, (user) => user.alreadyRead)
-    @JoinColumn({ name: 'userId' })
-        user: Users;
-
     @ManyToOne(() => Books, (books) => books.alreadyRead)
     @JoinColumn({ name: 'bookId' })
         book: Books;
+
+    @ManyToOne(() => Users, (user) => user.alreadyRead)
+    @JoinColumn({ name: 'userId' })
+        user: Users;
 }

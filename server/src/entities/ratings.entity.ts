@@ -2,9 +2,9 @@ import {
     Column, Entity, JoinColumn, ManyToOne,
 } from 'typeorm';
 
+import { Books } from './books.entity';
 import { CommonsFields } from './commons-fields.entity';
 import { Users } from './users.entity';
-import { Books } from './books.entity';
 
 @Entity()
 export class Ratings extends CommonsFields {

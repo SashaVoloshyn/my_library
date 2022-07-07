@@ -1,13 +1,13 @@
 import {
-    Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany,
+    Column, Entity, OneToMany, JoinColumn, ManyToOne, ManyToMany,
 } from 'typeorm';
 
-import { CommonsFields } from './commons-fields.entity';
 import { AlreadyRead } from './already-read.entity';
 import { Authors } from './authors.entity';
+import { CommonsFields } from './commons-fields.entity';
 import { Comments } from './comments.entity';
-import { Favorites } from './favorites.entity';
 import { Genres } from './genres.entity';
+import { Favorites } from './favorites.entity';
 import { Ratings } from './ratings.entity';
 import { WillRead } from './will-read.entity';
 
@@ -66,25 +66,25 @@ export class Books extends CommonsFields {
     })
         authorId: number;
 
-    @ManyToMany(() => Genres, (genres) => genres.books)
-        genres: Genres[];
-
     @OneToMany(() => AlreadyRead, (alreadyRead) => alreadyRead.book)
         alreadyRead: AlreadyRead;
-
-    @OneToMany(() => WillRead, (willRead) => willRead.book)
-        willRead: WillRead;
-
-    @OneToMany(() => Favorites, (favorites) => favorites.book)
-        favorites: Favorites[];
-
-    @OneToMany(() => Comments, (comment) => comment.book)
-        comments: Comments[];
 
     @ManyToOne(() => Authors, (author) => author.books)
     @JoinColumn({ name: 'authorId' })
         author: Authors;
 
+    @OneToMany(() => Comments, (comment) => comment.book)
+        comments: Comments[];
+
+    @ManyToMany(() => Genres, (genres) => genres.books)
+        genres: Genres[];
+
+    @OneToMany(() => Favorites, (favorites) => favorites.book)
+        favorites: Favorites[];
+
     @OneToMany(() => Ratings, (ratings) => ratings.book)
         ratings: Ratings[];
+
+    @OneToMany(() => WillRead, (willRead) => willRead.book)
+        willRead: WillRead;
 }

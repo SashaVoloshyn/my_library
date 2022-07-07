@@ -9,9 +9,9 @@
       "lint:fix": "npm run lint -- --fix",
       "start": "rimraf dist && tsc-watch --onSuccess \"nodemon ./src/app.ts\"",
       "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/configs/ormconfig.ts",
-      "migration:create": "typeorm migration:create ./src/migrations/<FilName>",
+      "migration:create": "typeorm migration:create ./src/migrations/fileName",
       "migration:revert": "typeorm-ts-node-commonjs -d ./src/ormconfig.ts migration:revert",
-      "migration:generate": "npx typeorm-ts-node-esm migration:generate ./src/migrations/update-post-table -d ./src/configs/ormconfig.ts"
+      "migration:generate": "typeorm-ts-node-commonjs -d ./src/configs/ormconfig.ts migration:generate"
    },
    "author": "",
    "license": "ISC",

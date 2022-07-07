@@ -1,8 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import dayjs, { extend } from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjs(extend(utc));
+import {
+    CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class CommonsFields {
@@ -12,18 +10,9 @@ export class CommonsFields {
     })
         id: number;
 
-    @Column({
-        name: 'createdAt',
-        type: 'timestamp',
-        nullable: false,
-        default: dayjs().utc().format(),
-    })
-        createdAt: string;
+    @CreateDateColumn()
+        createdAt: Date;
 
-    @Column({
-        name: 'deletedAt',
-        type: 'timestamp',
-        nullable: true,
-    })
-        deletedAt?: string;
+    @DeleteDateColumn()
+        deletedAt: Date;
 }

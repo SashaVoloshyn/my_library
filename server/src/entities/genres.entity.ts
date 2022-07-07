@@ -1,5 +1,5 @@
 import {
-    Entity, ManyToMany, JoinTable, Column,
+    Entity, Column, ManyToMany, JoinTable,
 } from 'typeorm';
 
 import { Authors } from './authors.entity';

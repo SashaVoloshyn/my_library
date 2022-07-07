@@ -28,8 +28,7 @@
         "class-methods-use-this": "off",
         "no-shadow": "off",
         "no-unused-vars": "off",
-        "no-underscore-dangle": "off",
-        "max-len": ["error", { "code": 140 }]
+        "no-underscore-dangle": "off"
     },
     "settings": {
         "import/resolver": {
