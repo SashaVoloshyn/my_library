@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import { mainConfig } from '../configs';
 
 class BcryptService {
-    public async hash(data: any): Promise<string> {
-        return bcrypt.hash(data, Number(mainConfig.PASSWORD_SALT_ROUNDS));
+    public async hashPassword(password: string): Promise<string> {
+        return bcrypt.hash(password, Number(mainConfig.PASSWORD_SALT_ROUNDS));
     }
 
     public async compare(password: string, passwordFromDB: string): Promise<boolean> {
