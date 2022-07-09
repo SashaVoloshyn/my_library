@@ -12,14 +12,14 @@ class AuthController {
         try {
             const {
                 nickName, role, email, password,
-            } = req.user as IUser;
+            } = req.body as IUser;
             console.log(req);
             console.log(req.user);
             console.log(req.body);
 
             console.log(nickName);
 
-            const userDB = await authService.regii({
+            const userDB = await authService.registration({
                 nickName, role, email, password,
             });
             console.log(userDB);
@@ -33,7 +33,7 @@ class AuthController {
                 return;
             }
 
-            res.status(HttpStatusEnum.CREATED).json({
+            return res.status(HttpStatusEnum.CREATED).json({
                 status: HttpStatusEnum.CREATED,
                 data: userDB,
                 message: HttpMessageEnum.CREATED,
