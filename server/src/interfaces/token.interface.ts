@@ -11,10 +11,18 @@ export interface IToken extends ICommonFields{
 
 export interface ITokenPair {
     accessToken: string,
-    refreshToken: string
+    refreshToken: string,
+    clientKey : string
 }
 
+export interface IPayload {
+    nickName?: string,
+    role?: RoleEnum | string,
+    id?: number
+}
 export interface ITokenPayload {
+    accessToken: string,
+    refreshToken: string
     nickName?: string,
     role?: RoleEnum | string,
     id?: number

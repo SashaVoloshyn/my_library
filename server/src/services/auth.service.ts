@@ -1,16 +1,32 @@
-import { IUser } from '../interfaces';
+import { IPayload, IUser } from '../interfaces';
 import { userService } from './user.service';
-import { Users } from '../entities';
-import { userRepository } from '../repositories';
+import { jwtService } from './jwt.service';
+import {clientService} from "./client.service";
 
 class AuthService {
-    public async registration(user:IUser): Promise<any> {
+    public async registration(user: IUser): Promise<any> {
         const createUser = await userService.createOne(user);
         return createUser;
     }
 
-    public async regii(user: IUser): Promise<Users> {
-        return userRepository.createOne(user);
+    public async login(payload: IPayload, clientKey: string): Promise<any> {
+        const genereteToken = await jwtService.generateTokenPair(payload, clientKey);
+        if (!genereteToken) {
+            return;
+        }
+        if (genereteToken) {
+            const { accessToken, refreshToken, clientKey } = genereteToken;
+            return {
+                accessToken,
+                refreshToken,
+                clientKey,
+            };
+        }
+    }
+
+    public async logout(clientKey: string): Promise<any> {
+        return clientService.delete(clientKey);
     }
 }
+
 export const authService = new AuthService();

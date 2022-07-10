@@ -21,7 +21,7 @@ export interface IRequest extends Request{
     rating?: IRating,
     user?: IUser | Users,
     willRead?: IWillRead,
-    clientKey?: string,
+    authorizatePassword?: string
     authorization?: string,
     email?: string,
 }

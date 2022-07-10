@@ -22,6 +22,14 @@ class UserRepository {
         });
     }
 
+    public async getOneByEmail(email: string): Promise<Users | null> {
+        return this.userRepository.findOneBy({ email });
+    }
+
+    public async getOneById(id: number): Promise<Users | null> {
+        return this.userRepository.findOneBy({ id });
+    }
+
     public async getAll(): Promise<Users[]> {
         return this.userRepository.createQueryBuilder('users')
             .leftJoinAndSelect('users.comments', 'comments')

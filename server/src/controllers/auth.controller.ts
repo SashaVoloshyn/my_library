@@ -1,10 +1,15 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction } from 'express';
 
-import { IRequest, IResponse, IUser } from '../interfaces';
+import {
+    IRequest, IResponse, ITokenPair, IUser,
+} from '../interfaces';
 import { Users } from '../entities';
 import { authService } from '../services/auth.service';
 import { ErrorHandler } from '../errors';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
+import { errorMessageConstants } from '../constants/error-message.constants';
+import { clientService } from '../services';
+import { ClientEnum } from '../enums/client.enum';
 
 class AuthController {
     public async registration(req: IRequest, res: IResponse<Users>, next: NextFunction)
@@ -13,11 +18,6 @@ class AuthController {
             const {
                 nickName, role, email, password,
             } = req.body as IUser;
-            console.log(req);
-            console.log(req.user);
-            console.log(req.body);
-
-            console.log(nickName);
 
             const userDB = await authService.registration({
                 nickName, role, email, password,
@@ -26,7 +26,7 @@ class AuthController {
 
             if (!userDB) {
                 next(new ErrorHandler(
-                    'errorMessageConstant.userNotRegistration',
+                    errorMessageConstants.userNotRegistration,
                     HttpStatusEnum.NOT_IMPLEMENTED,
                     HttpMessageEnum.NOT_IMPLEMENTED,
                 ));
@@ -43,15 +43,38 @@ class AuthController {
         }
     }
 
-    public async regtest(req:Request, res:Response, next:NextFunction): Promise<any> {
+    public async login(req:IRequest, res:IResponse<ITokenPair>, next:NextFunction)
+    : Promise<IResponse<ITokenPair> | undefined> {
         try {
-            const test = req.body;
-            console.log(req.body);
-            const save = await authService.registration(test);
-            res.json(save);
+            const { nickName, role, id } = req.user as Users;
+
+            const clientKey = clientService.generateClientKey(id, nickName, ClientEnum.AUTHTOKEN) as string;
+
+            const tokensPairGenerat = await authService.login({ id, role, nickName }, clientKey);
+
+            if (!tokensPairGenerat) {
+                next(new ErrorHandler(
+                    errorMessageConstants.unknown,
+                    HttpStatusEnum.INTERNAL_SERVER_ERROR,
+                    HttpMessageEnum.INTERNAL_SERVER_ERROR,
+                ));
+                return;
+            }
+            const { accessToken, refreshToken } = tokensPairGenerat;
+            return res.status(HttpStatusEnum.OK).json({
+                status: HttpStatusEnum.OK,
+                message: HttpMessageEnum.OK,
+                data: {
+                    accessToken,
+                    refreshToken,
+                    clientKey,
+                },
+            });
         } catch (e) {
             next(e);
         }
+
+
     }
 }
 

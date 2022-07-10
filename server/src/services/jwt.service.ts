@@ -1,10 +1,13 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { mainConfig } from '../configs';
-import { ITokenPair, ITokenPayload } from '../interfaces';
+import { IPayload, ITokenPair } from '../interfaces';
+import { constants } from '../constants';
+import { clientService } from './client.service';
 
 class JwtService {
-    public async generateTokenPair(payload:ITokenPayload): Promise<ITokenPair> {
+    public async generateTokenPair(payload:IPayload, clientKey:string)
+        : Promise<ITokenPair | undefined> {
         const accessToken = jwt.sign(
             payload,
             mainConfig.SECRET_ACCESS_KEY as string,
@@ -16,9 +19,18 @@ class JwtService {
             { expiresIn: mainConfig.EXPIRES_IN_REFRESH },
         );
 
+        const saveToken = await clientService.set(
+            clientKey,
+            JSON.stringify({ accessToken, refreshToken }),
+        );
+
+        if (!saveToken) {
+            return;
+        }
         return {
             accessToken,
             refreshToken,
+            clientKey,
         };
     }
 
@@ -39,11 +51,15 @@ class JwtService {
     //     return jwt.sign(payload, secretWord, { expiresIn });
     // }
 
-    public verify(token: string, type = 'access'): string | JwtPayload {
+    public verify(token: string, type = constants.ACCESS): string | JwtPayload {
         let secretWord = mainConfig.SECRET_ACCESS_KEY;
 
-        if (type === 'refresh') {
+        if (type === constants.REFRESH) {
             secretWord = mainConfig.SECRET_REFRESH_KEY;
+        }
+
+        if (type === constants.FORGOT) {
+            secretWord = mainConfig.SECRET_FORGOT_PASSWORD_KEY;
         }
 
         return jwt.verify(token, secretWord);
