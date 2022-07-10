@@ -6,17 +6,18 @@ class JoiValidatorUtil {
     public static userSchema: Joi.ObjectSchema = Joi.object({
         nickName: Joi.string().min(3).max(20).trim()
             .required()
-            .messages({ 'any.only': 'Must be a valid email address' }),
-        password: Joi.string().min(7).max(30).trim()
+            .messages(errorValidationMessageConst),
+        password: joiCommonValidator.password.trim()
             .required()
-            .messages({ 'any.only': 'Must be a valid email address' }),
-        email: Joi.string().email().min(5).max(25)
-            .trim()
+            .messages(errorValidationMessageConst),
+        email: joiCommonValidator.email.trim()
             .required()
-            .messages({ 'any.only': 'Must be a valid email address' }),
+            .messages(errorValidationMessageConst),
         role: Joi.string().min(4).max(5).trim()
-            .messages({ 'any.only': 'Must be a valid email address' })
+            .messages(errorValidationMessageConst)
             .optional(),
+        avatar: Joi.binary().optional()
+            .messages(errorValidationMessageConst),
     });
 
     public static loginSchema: Joi.ObjectSchema = Joi.object({
@@ -25,9 +26,23 @@ class JoiValidatorUtil {
             .messages(errorValidationMessageConst).trim(),
     });
 
+    public static passwordSchema: Joi.ObjectSchema = Joi.object({
+        password: joiCommonValidator.password.trim()
+            .required()
+            .messages(errorValidationMessageConst),
+    });
+
+    public static emailSchema: Joi.ObjectSchema = Joi.object({
+        password: joiCommonValidator.email.trim()
+            .required()
+            .messages(errorValidationMessageConst),
+    });
+
     public static authTokenSchema: Joi.ObjectSchema = Joi.object({
         authorization: Joi.string().min(3).max(200).required(),
     });
 }
 
-export const { userSchema, loginSchema, authTokenSchema } = JoiValidatorUtil;
+export const {
+    userSchema, loginSchema, authTokenSchema, passwordSchema, emailSchema,
+} = JoiValidatorUtil;

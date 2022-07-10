@@ -73,8 +73,6 @@ class AuthController {
         } catch (e) {
             next(e);
         }
-
-
     }
 }
 

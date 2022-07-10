@@ -1,7 +1,7 @@
 import { IPayload, IUser } from '../interfaces';
 import { userService } from './user.service';
 import { jwtService } from './jwt.service';
-import {clientService} from "./client.service";
+import { clientService } from './client.service';
 
 class AuthService {
     public async registration(user: IUser): Promise<any> {

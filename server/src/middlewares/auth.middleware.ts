@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 
 import { IRequest, IUser } from '../interfaces';
-import { loginSchema } from '../utils';
+import { loginSchema, userSchema } from '../utils';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
 import { userRepository } from '../repositories';
@@ -51,6 +51,36 @@ class AuthMiddleware {
                 next(new ErrorHandler(errorMessageConstants.unauthorized, HttpStatusEnum.UNAUTHORIZED, HttpMessageEnum.UNAUTHORIZED));
                 return;
             }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public registrationBodyValidate(req: IRequest, _: Response, next: NextFunction): void {
+        try {
+            const { value, error } = userSchema.validate(req.body);
+            if (error) {
+                next(new ErrorHandler(error.message, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST));
+                return;
+            }
+            req.user = value;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async checkUserIsUniq(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const { email, nickName } = req.user as IUser;
+            const user = await userRepository.getOneByEmailOrNickName({ nickName, email });
+
+            if (user) {
+                next(new ErrorHandler(errorMessageConstants.userAlreadyExists, HttpStatusEnum.CONFLICT, HttpMessageEnum.CONFLICT));
+                return;
+            }
+
             next();
         } catch (e) {
             next(e);
