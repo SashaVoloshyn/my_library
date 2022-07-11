@@ -7,7 +7,7 @@ import { Users } from '../entities';
 import { authService } from '../services/auth.service';
 import { ErrorHandler } from '../errors';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
-import { errorMessageConstants } from '../constants/error-message.constants';
+import { errorMessageConstants } from '../constants';
 import { clientService } from '../services';
 import { ClientEnum } from '../enums/client.enum';
 
@@ -48,7 +48,7 @@ class AuthController {
         try {
             const { nickName, role, id } = req.user as Users;
 
-            const clientKey = clientService.generateClientKey(id, nickName, ClientEnum.AUTHTOKEN) as string;
+            const clientKey = clientService.generateClientKey(nickName, ClientEnum.AUTHTOKEN) as string;
 
             const tokensPairGenerat = await authService.login({ id, role, nickName }, clientKey);
 
@@ -74,6 +74,32 @@ class AuthController {
             next(e);
         }
     }
+
+    public async logout(req: IRequest, res: IResponse<number>, next: NextFunction): Promise<IResponse<number> | undefined> {
+        try {
+            const clientKey = req.clientKey as string;
+            const deletedTokens = await authService.logout(clientKey);
+
+            if (!deletedTokens) {
+                next(new ErrorHandler(
+                    errorMessageConstants.unknown,
+                    HttpStatusEnum.INTERNAL_SERVER_ERROR,
+                    HttpMessageEnum.INTERNAL_SERVER_ERROR,
+                ));
+                return;
+            }
+
+            return res.status(HttpStatusEnum.OK).json({
+                status: HttpStatusEnum.OK,
+                message: HttpMessageEnum.OK,
+                data: deletedTokens,
+            });
+        } catch (e) {
+            next(e);
+        }
+    }
+
+
 }
 
 export const authController = new AuthController();

@@ -38,11 +38,19 @@ class JoiValidatorUtil {
             .messages(errorValidationMessageConst),
     });
 
-    public static authTokenSchema: Joi.ObjectSchema = Joi.object({
-        authorization: Joi.string().min(3).max(200).required(),
+    public static clientKeySchema: Joi.ObjectSchema = Joi.object({
+        clientKey: joiCommonValidator.clientKey
+            .required()
+            .messages(errorValidationMessageConst),
+    });
+
+    public static tokenSchema: Joi.ObjectSchema = Joi.object({
+        token: joiCommonValidator.token
+            .required()
+            .messages(errorValidationMessageConst),
     });
 }
 
 export const {
-    userSchema, loginSchema, authTokenSchema, passwordSchema, emailSchema,
+    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema, emailSchema,
 } = JoiValidatorUtil;

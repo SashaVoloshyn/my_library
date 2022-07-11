@@ -6,3 +6,8 @@ export interface IUser {
     email: string,
     role?: RoleEnum
 }
+
+export interface IUniqueUserField{
+    email?: string,
+    nickName?: string
+}

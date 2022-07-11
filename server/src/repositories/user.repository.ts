@@ -1,6 +1,6 @@
 import { AppDataSource } from '../configs';
 import { Users } from '../entities';
-import { IUser } from '../interfaces';
+import { IUniqueUserField, IUser } from '../interfaces';
 
 class UserRepository {
     userRepository;
@@ -13,7 +13,7 @@ class UserRepository {
         return this.userRepository.save(user);
     }
 
-    public async getOneByEmailOrNickName({ email, nickName }: any): Promise<Users | null> {
+    public async getOneByEmailOrNickName({ email, nickName }: IUniqueUserField): Promise<Users | null> {
         return this.userRepository.findOne({
             where: [
                 { email },

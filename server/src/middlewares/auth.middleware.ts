@@ -1,12 +1,16 @@
 import { NextFunction, Response } from 'express';
 
-import { IRequest, IUser } from '../interfaces';
-import { loginSchema, userSchema } from '../utils';
+import { IPayload, IRequest, IUser } from '../interfaces';
+import {
+    clientKeySchema, loginSchema, tokenSchema, userSchema,
+} from '../utils';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
 import { userRepository } from '../repositories';
-import { errorMessageConstants } from '../constants';
-import { bcryptService } from '../services';
+import { constants, errorMessageConstants } from '../constants';
+import {
+    bcryptService, clientService, jwtService, userService,
+} from '../services';
 import { Users } from '../entities';
 
 class AuthMiddleware {
@@ -81,6 +85,210 @@ class AuthMiddleware {
                 return;
             }
 
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async authorization(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const authorization = req.get(constants.AUTHORIZATION) as string;
+
+            if (!authorization) {
+                next(new ErrorHandler(
+                    errorMessageConstants.authorization,
+                    HttpStatusEnum.BAD_REQUEST,
+                    HttpMessageEnum.BAD_REQUEST,
+                ));
+                return;
+            }
+
+            req.authorization = authorization;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public isClientKey(req: IRequest, _: Response, next: NextFunction): void {
+        try {
+            const { body } = req;
+
+            const { error } = clientKeySchema.validate(body);
+
+            if (error) {
+                next(
+                    new ErrorHandler(
+                        error.message,
+                        HttpStatusEnum.BAD_REQUEST,
+                        HttpMessageEnum.BAD_REQUEST,
+                    ),
+                );
+                return;
+            }
+
+            const { clientKey } = body;
+            req.clientKey = clientKey;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async checkAuthorizationOnBearer(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const authorization = req.authorization as string;
+            const bearer = authorization.split(' ')[0];
+
+            if (bearer !== constants.BEARER) {
+                next(new ErrorHandler(
+                    errorMessageConstants.authorization,
+                    HttpStatusEnum.BAD_REQUEST,
+                    HttpMessageEnum.BAD_REQUEST,
+                ));
+                return;
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public validateAuthorizationToken(req: IRequest, _: Response, next: NextFunction): void {
+        try {
+            const authorization = req.authorization as string;
+            const token = authorization.split(' ')[1];
+
+            if (!token) {
+                next(new ErrorHandler(
+                    errorMessageConstants.authorization,
+                    HttpStatusEnum.BAD_REQUEST,
+                    HttpMessageEnum.BAD_REQUEST,
+                ));
+                return;
+            }
+
+            const { error } = tokenSchema.validate({ token });
+
+            if (error) {
+                next(new ErrorHandler(error.message, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST));
+                next();
+                return;
+            }
+
+            req.authorization = token;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async verifyAccessToken(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const token = req.authorization as string;
+            const { nickName } = jwtService.verify(token) as IPayload;
+
+            if (!nickName) {
+                next(
+                    new ErrorHandler(
+                        errorMessageConstants.unauthorized,
+                        HttpStatusEnum.UNAUTHORIZED,
+                        HttpMessageEnum.UNAUTHORIZED,
+                    ),
+                );
+                return;
+            }
+
+            req.payload = { nickName };
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async verifyRefreshToken(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const token = req.authorization as string;
+            const { nickName, role, id } = jwtService.verify(token, constants.REFRESH) as IPayload;
+
+            if (!nickName || !role || !id) {
+                next(
+                    new ErrorHandler(
+                        errorMessageConstants.unauthorized,
+                        HttpStatusEnum.UNAUTHORIZED,
+                        HttpMessageEnum.UNAUTHORIZED,
+                    ),
+                );
+                return;
+            }
+
+            req.payload = { nickName, role, id };
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async verifyForgotToken(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const token = req.authorization as string;
+            const { nickName, role, id } = jwtService.verify(token, constants.FORGOT) as IPayload;
+
+            if (!nickName) {
+                next(
+                    new ErrorHandler(
+                        errorMessageConstants.unauthorized,
+                        HttpStatusEnum.UNAUTHORIZED,
+                        HttpMessageEnum.UNAUTHORIZED,
+                    ),
+                );
+                return;
+            }
+
+            req.payload = { nickName, role, id };
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async wasItIssuedToken(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const key = req.clientKey as string;
+
+            const keyFromDB = await clientService.getKey(key);
+
+            if (!keyFromDB) {
+                next(
+                    new ErrorHandler(
+                        errorMessageConstants.unauthorized,
+                        HttpStatusEnum.UNAUTHORIZED,
+                        HttpMessageEnum.UNAUTHORIZED,
+                    ),
+                );
+                return;
+            }
+
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async checkUserAuthByPayload(req: IRequest, _: Response, next: NextFunction): Promise<void> {
+        try {
+            const { nickName: nickNamePayload } = req.payload as IPayload;
+            const nickName = nickNamePayload as string;
+            const user = await userService.getOneByEmailOrNickName({ nickName });
+
+            if (!user) {
+                next(new ErrorHandler(errorMessageConstants.userNotFound, HttpStatusEnum.NOT_FOUND, HttpMessageEnum.NOT_FOUND));
+                return;
+            }
+
+            req.user = user;
             next();
         } catch (e) {
             next(e);

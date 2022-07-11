@@ -20,5 +20,16 @@ authRouter.post(
     authController.login,
 );
 
-authRouter.post('/logout');
+authRouter.post(
+    '/logout',
+    authMiddleware.authorization,
+    authMiddleware.isClientKey,
+    authMiddleware.checkAuthorizationOnBearer,
+    authMiddleware.validateAuthorizationToken,
+    authMiddleware.verifyAccessToken,
+    authMiddleware.wasItIssuedToken,
+    authMiddleware.checkUserAuthByPayload,
+    authController.logout,
+);
+
 authRouter.post('/forgotPassword');

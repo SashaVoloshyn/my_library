@@ -1,4 +1,6 @@
 import { createClient } from 'redis';
+import { v4 as uuidv4 } from 'uuid';
+
 import { ClientEnum } from '../enums/client.enum';
 
 class ClientService {
@@ -19,13 +21,25 @@ class ClientService {
         return this.client.set(key, data);
     }
 
-    public generateClientKey(id:any, nickName:string, type: ClientEnum) {
+    public async setExpire(key: string, expireTime: number, value: string): Promise<string | null> {
+        return this.client.setEx(key, expireTime, value);
+    }
+
+    public async getKey(key: string): Promise<string[]> {
+        return this.client.keys(key);
+    }
+
+    public generateClientKey(nickName:string, type: ClientEnum) : string {
+        let clientKey = '';
+
         if (type === ClientEnum.AUTHTOKEN) {
-            return `${ClientEnum.AUTHTOKEN}${id}${nickName}`;
+            clientKey = `${ClientEnum.AUTHTOKEN}:${nickName}:${uuidv4()}`;
         }
         if (type === ClientEnum.FORGOTTOKEN) {
-            return `${ClientEnum.FORGOTTOKEN}${id}${nickName}`;
+            clientKey = `${ClientEnum.FORGOTTOKEN}:${nickName}:${uuidv4()}`;
         }
+
+        return clientKey;
     }
 
     public async delete(key: string): Promise<any> {

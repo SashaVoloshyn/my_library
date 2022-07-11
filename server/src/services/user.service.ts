@@ -1,10 +1,10 @@
 import { userRepository } from '../repositories';
-import { IUser } from '../interfaces';
+import { IUniqueUserField, IUser } from '../interfaces';
 import { bcryptService } from './bcrypt.service';
 import { Users } from '../entities';
 
 export class UserService {
-    getOneByEmailOrNickName(data: IUser): any {
+    public async getOneByEmailOrNickName(data: IUniqueUserField): Promise<Users | null> {
         return userRepository.getOneByEmailOrNickName(data);
     }
 

@@ -10,6 +10,7 @@ import { IRating } from '../rating.interface';
 import { IUser } from '../user.interface';
 import { IWillRead } from '../will-read.interface';
 import { Users } from '../../entities';
+import { IPayload } from '../token.interface';
 
 export interface IRequest extends Request{
     alreadyReadBook?: IAlreadyRead,
@@ -21,7 +22,9 @@ export interface IRequest extends Request{
     rating?: IRating,
     user?: IUser | Users,
     willRead?: IWillRead,
+    payload?: IPayload;
     authorizatePassword?: string
     authorization?: string,
     email?: string,
+    clientKey?: string
 }
