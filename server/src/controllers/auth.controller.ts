@@ -158,11 +158,12 @@ class AuthController {
 
     public async changePassword(req: IRequest, res: IResponse<string>, next: NextFunction): Promise<IResponse<string> | undefined> {
         try {
-            const password = req.password as string;
-            const payload = req.payload as IPayload;
-            const id = payload as number;
+            const {password} = req.password as any;
+            const {id} = req.payload as IPayload;
+            console.log(password);
+            console.log(id, ';;;;;;;;;;;;;;;;;');
 
-            const changePassword = await userService.changePassword(id, password);
+            const changePassword = await userService.changePassword(Number(id), password);
             console.log(changePassword,'chensdflfsd;')
 
             if (!changePassword) {
