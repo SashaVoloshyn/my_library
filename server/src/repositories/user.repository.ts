@@ -1,3 +1,5 @@
+import { UpdateResult } from 'typeorm';
+
 import { AppDataSource } from '../configs';
 import { Users } from '../entities';
 import { IUniqueUserField, IUser } from '../interfaces';
@@ -29,6 +31,17 @@ class UserRepository {
     public async getOneById(id: number): Promise<Users | null> {
         return this.userRepository.findOneBy({ id });
     }
+
+    public async changePassword(id: number, password: string): Promise<UpdateResult> {
+        return this.userRepository.update({ id }, { password });
+    }
+    // public async changePassword(id: number, password: string): Promise<UpdateResult> {
+    //     console.log(id, password);
+    //     return this.userRepository.createQueryBuilder().update(Users).set({
+    //         password,
+    //     }).where('id = :id', { id })
+    //         .execute();
+    // }
 
     public async getAll(): Promise<Users[]> {
         return this.userRepository.createQueryBuilder('users')

@@ -32,4 +32,35 @@ authRouter.post(
     authController.logout,
 );
 
-authRouter.post('/forgotPassword');
+authRouter.post(
+    '/refresh',
+    authMiddleware.authorization,
+    authMiddleware.isClientKey,
+    authMiddleware.checkAuthorizationOnBearer,
+    authMiddleware.validateAuthorizationToken,
+    authMiddleware.verifyRefreshToken,
+    authMiddleware.wasItIssuedToken,
+    authMiddleware.checkUserAuthByPayload,
+    authController.refresh,
+);
+
+authRouter.post(
+    '/forgotPassword',
+    authMiddleware.validateEmail,
+    authMiddleware.checkUserExistByEmail,
+    authMiddleware.alreadyExistsForgotToken,
+    authController.forgotPassword,
+
+);
+
+authRouter.patch(
+    '/forgotPassword',
+    authMiddleware.authorization,
+    authMiddleware.isPassword,
+    authMiddleware.checkAuthorizationOnBearer,
+    authMiddleware.validateAuthorizationToken,
+    authMiddleware.verifyForgotToken,
+    authMiddleware.checkUserAuthByPayload,
+    authController.changePassword,
+
+);

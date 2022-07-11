@@ -29,6 +29,10 @@ class ClientService {
         return this.client.keys(key);
     }
 
+    public async getAnyKeysByNickName(nickName: string, type: ClientEnum): Promise<string[]> {
+        return this.client.keys(`*${type}:${nickName}*`);
+    }
+
     public generateClientKey(nickName:string, type: ClientEnum) : string {
         let clientKey = '';
 

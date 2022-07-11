@@ -27,3 +27,8 @@ export interface ITokenPayload {
     role?: RoleEnum | string,
     id?: number
 }
+
+export interface IForgotToken {
+    forgotToken: string,
+    clientKey: string
+}

@@ -26,5 +26,6 @@ export interface IRequest extends Request{
     authorizatePassword?: string
     authorization?: string,
     email?: string,
+    password?: string,
     clientKey?: string
 }

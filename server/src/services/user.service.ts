@@ -1,3 +1,5 @@
+import { UpdateResult } from 'typeorm';
+
 import { userRepository } from '../repositories';
 import { IUniqueUserField, IUser } from '../interfaces';
 import { bcryptService } from './bcrypt.service';
@@ -14,6 +16,11 @@ export class UserService {
         const data = { ...user, password: passwordHashed };
         const createUser = await userRepository.createOne(data);
         return createUser;
+    }
+
+    public async changePassword(id: number, password: string): Promise<UpdateResult> {
+        const hashPassword = await bcryptService.hashPassword(password);
+        return userRepository.changePassword(id, hashPassword);
     }
 }
 export const userService = new UserService();

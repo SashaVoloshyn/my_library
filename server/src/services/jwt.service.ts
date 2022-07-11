@@ -1,12 +1,14 @@
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 import { mainConfig } from '../configs';
-import { IPayload, ITokenPair } from '../interfaces';
+import { IForgotToken, IPayload, ITokenPair } from '../interfaces';
 import { constants } from '../constants';
 import { clientService } from './client.service';
+import { ClientEnum } from '../enums/client.enum';
+import { Users } from '../entities';
 
 class JwtService {
-    public async generateTokenPair(payload:IPayload, clientKey:string)
+    public async generateTokenPair(payload:IPayload)
         : Promise<ITokenPair | undefined> {
         const accessToken = jwt.sign(
             payload,
@@ -19,6 +21,7 @@ class JwtService {
             { expiresIn: mainConfig.EXPIRES_IN_REFRESH },
         );
 
+        const clientKey = clientService.generateClientKey(payload.nickName!, ClientEnum.AUTHTOKEN) as string;
         const saveToken = await clientService.setExpire(
             clientKey,
             Number(mainConfig.EXPIRES_CLIENT_TOKENS_PAIR),
@@ -48,6 +51,29 @@ class JwtService {
         }
 
         return jwt.verify(token, secretWord);
+    }
+
+    public async generateForgotToken(payload: IPayload): Promise<IForgotToken | undefined> {
+        const { nickName } = payload as Users;
+        const forgotToken = jwt.sign(
+            payload,
+            mainConfig.SECRET_FORGOT_PASSWORD_KEY as string,
+            { expiresIn: mainConfig.EXPIRES_IN_FORGOT_PASSWORD },
+        );
+        const clientKey = clientService.generateClientKey(nickName, ClientEnum.FORGOTTOKEN);
+
+        if (clientKey) {
+            const savedToken = await clientService
+                .setExpire(clientKey, Number(mainConfig.EXPIRES_CLIENT_FORGOT), JSON.stringify({ forgotToken }));
+            if (!savedToken) {
+                return;
+            }
+
+            return {
+                clientKey,
+                forgotToken,
+            };
+        }
     }
 }
 

@@ -33,7 +33,7 @@ class JoiValidatorUtil {
     });
 
     public static emailSchema: Joi.ObjectSchema = Joi.object({
-        password: joiCommonValidator.email.trim()
+        email: joiCommonValidator.email.trim()
             .required()
             .messages(errorValidationMessageConst),
     });

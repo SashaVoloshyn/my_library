@@ -1,4 +1,6 @@
-import { IPayload, IUser } from '../interfaces';
+import {
+    IForgotToken, IPayload, ITokenPair, IUser,
+} from '../interfaces';
 import { userService } from './user.service';
 import { jwtService } from './jwt.service';
 import { clientService } from './client.service';
@@ -9,8 +11,8 @@ class AuthService {
         return createUser;
     }
 
-    public async login(payload: IPayload, clientKey: string): Promise<any> {
-        const genereteToken = await jwtService.generateTokenPair(payload, clientKey);
+    public async login(payload: IPayload): Promise<any> {
+        const genereteToken = await jwtService.generateTokenPair(payload);
         if (!genereteToken) {
             return;
         }
@@ -26,6 +28,19 @@ class AuthService {
 
     public async logout(clientKey: string): Promise<any> {
         return clientService.delete(clientKey);
+    }
+
+    public async refresh(payload:IPayload, clientKey:string):Promise<ITokenPair | undefined> {
+        const numbDeleted = await clientService.delete(clientKey);
+
+        if (!numbDeleted) {
+            return;
+        }
+        return jwtService.generateTokenPair(payload);
+    }
+
+    public async forgotPassword(payload: IPayload): Promise<IForgotToken| undefined> {
+        return jwtService.generateForgotToken(payload);
     }
 }
 

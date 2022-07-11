@@ -1,8 +1,10 @@
 import { NextFunction, Response } from 'express';
 
-import { IPayload, IRequest, IUser } from '../interfaces';
 import {
-    clientKeySchema, loginSchema, tokenSchema, userSchema,
+    IPayload, IRequest, IResponse, ITokenPair, IUser,
+} from '../interfaces';
+import {
+    clientKeySchema, emailSchema, loginSchema, passwordSchema, tokenSchema, userSchema,
 } from '../utils';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
@@ -12,6 +14,7 @@ import {
     bcryptService, clientService, jwtService, userService,
 } from '../services';
 import { Users } from '../entities';
+import { ClientEnum } from '../enums/client.enum';
 
 class AuthMiddleware {
     public loginBodyValidate(req: IRequest, _: Response, next: NextFunction): void {
@@ -248,6 +251,7 @@ class AuthMiddleware {
             }
 
             req.payload = { nickName, role, id };
+            console.log(req.payload, 'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
             next();
         } catch (e) {
             next(e);
@@ -289,6 +293,63 @@ class AuthMiddleware {
             }
 
             req.user = user;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public validateEmail(req: IRequest, _: Response, next: NextFunction): void {
+        try {
+            const { body } = req;
+            const { value, error } = emailSchema.validate(body);
+
+            if (error) {
+                next(new ErrorHandler(error.message, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST));
+                return;
+            }
+
+            req.email = value.email;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async alreadyExistsForgotToken(req: IRequest, _: IResponse<ITokenPair>, next: NextFunction): Promise<void> {
+        try {
+            const { nickName } = req.user as Users;
+
+            const anyKeysByNickName = await clientService.getAnyKeysByNickName(nickName, ClientEnum.FORGOTTOKEN);
+
+            if (anyKeysByNickName.length) {
+                const deleted = await clientService.delete(anyKeysByNickName[0]);
+
+                if (!deleted) {
+                    next(new ErrorHandler(
+                        errorMessageConstants.unknown,
+                        HttpStatusEnum.INTERNAL_SERVER_ERROR,
+                        HttpMessageEnum.INTERNAL_SERVER_ERROR,
+                    ));
+                }
+            }
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public isPassword(req: IRequest, _: IResponse<ITokenPair>, next: NextFunction): void {
+        try {
+            const body = req.body as string;
+            const { value, error } = passwordSchema.validate(body);
+
+            if (error) {
+                next(new ErrorHandler(error.message, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST));
+                return;
+            }
+
+            req.password = value;
             next();
         } catch (e) {
             next(e);

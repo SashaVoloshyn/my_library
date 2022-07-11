@@ -29,7 +29,8 @@
         "no-shadow": "off",
         "no-unused-vars": "off",
         "no-underscore-dangle": "off",
-        "consistent-return": "off"
+        "consistent-return": "off",
+        "max-len": ["error", { "code": 700 }]
     },
     "settings": {
         "import/resolver": {
