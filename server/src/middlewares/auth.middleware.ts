@@ -339,17 +339,58 @@ class AuthMiddleware {
         }
     }
 
+    // public isPassword(req: IRequest, _: IResponse<ITokenPair>, next: NextFunction): void {
+    //     try {
+    //         const body = req.body as string;
+    //         const { value, error } = passwordSchema.validate(body);
+    //
+    //         if (error) {
+    //             next(new ErrorHandler(error.message, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST));
+    //             return;
+    //         }
+    //
+    //         req.password = value;
+    //         next();
+    //     } catch (e) {
+    //         next(e);
+    //     }
+    // }
+
     public isPassword(req: IRequest, _: IResponse<ITokenPair>, next: NextFunction): void {
         try {
-            const body = req.body as string;
-            const { value, error } = passwordSchema.validate(body);
+            const { body } = req;
+            console.log(req.body);
+            const { value, error } = passwordSchema.validate({ password: body?.password });
 
             if (error) {
                 next(new ErrorHandler(error.message, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST));
                 return;
             }
 
-            req.password = value;
+            req.body = { clientKey: body?.clientKey };
+            req.password = value.password;
+            next();
+        } catch (e) {
+            next(e);
+        }
+    }
+
+    public async isAuthClientKey(req: IRequest, _: IResponse<ITokenPair>, next: NextFunction): Promise<void> {
+        try {
+            const clientKey = req.clientKey as string;
+            const forgotToken = await clientService.getKey(clientKey);
+
+            console.log(forgotToken);
+
+            if (!forgotToken.length) {
+                next(new ErrorHandler(
+                    errorMessageConstants.unauthorized,
+                    HttpStatusEnum.UNAUTHORIZED,
+                    HttpMessageEnum.UNAUTHORIZED,
+                ));
+                return;
+            }
+
             next();
         } catch (e) {
             next(e);

@@ -6,11 +6,14 @@ import {
     IRequest, IResponse, ITokenPair, IUser,
 } from '../interfaces';
 import { Users } from '../entities';
-import { authService } from '../services/auth.service';
+import {authService, clientService, s3Service, userService} from '../services';
 import { ErrorHandler } from '../errors';
-import { HttpMessageEnum, HttpStatusEnum, MessagesEnum } from '../enums';
+import {
+    EmailEnum, FileEnum, HttpMessageEnum, HttpStatusEnum, ItemTypeFileEnum, MessagesEnum,
+} from '../enums';
 import { emailMessagesConstant, errorMessageConstants } from '../constants';
-import { userService } from '../services';
+import { emailService } from '../services/email.service';
+import { mainConfig } from '../configs';
 
 class AuthController {
     public async registration(req: IRequest, res: IResponse<Users>, next: NextFunction)
@@ -33,6 +36,31 @@ class AuthController {
                 return;
             }
 
+            if (req.file) {
+                const userId = userDB.id;
+                const avatarSaved = await s3Service.uploadFile(req.file, userId, FileEnum.PHOTOS, ItemTypeFileEnum.USERS);
+
+                if (!avatarSaved.Location) {
+                    await emailService.sendEmail(userDB.email, EmailEnum.WELCOME, { nickName: userDB.nickName });
+                    return res.status(HttpStatusEnum.PARTIAL_CONTENT).json({
+                        status: HttpStatusEnum.PARTIAL_CONTENT,
+                        data: { ...userDB },
+                        message: HttpMessageEnum.PARTIAL_CONTENT,
+                    });
+                }
+                const pathFile = avatarSaved.Location.split(mainConfig.CLOUD_DOMAIN_NAME!)[1];
+
+                await userService.updateAvatar(userId, pathFile);
+                await emailService.sendEmail(userDB.email, EmailEnum.WELCOME, { nickName: userDB.nickName });
+                return res.status(HttpStatusEnum.CREATED).json({
+                    status: HttpStatusEnum.CREATED,
+                    data: { ...userDB, avatar: pathFile },
+                    message: HttpMessageEnum.CREATED,
+                });
+            }
+
+            await emailService.sendEmail(userDB.email, EmailEnum.WELCOME, { nickName: userDB.nickName });
+
             return res.status(HttpStatusEnum.CREATED).json({
                 status: HttpStatusEnum.CREATED,
                 data: userDB,
@@ -46,7 +74,9 @@ class AuthController {
     public async login(req:IRequest, res:IResponse<ITokenPair>, next:NextFunction)
     : Promise<IResponse<ITokenPair> | undefined> {
         try {
-            const { nickName, role, id } = req.user as Users;
+            const {
+                nickName, role, id, email,
+            } = req.user as Users;
 
             const tokensPairGenerat = await authService.login({ id, role, nickName });
 
@@ -59,6 +89,9 @@ class AuthController {
                 return;
             }
             const { accessToken, refreshToken, clientKey } = tokensPairGenerat;
+
+            await emailService.sendEmail(email, EmailEnum.WELCOME_BACK, { nickName });
+
             return res.status(HttpStatusEnum.OK).json({
                 status: HttpStatusEnum.OK,
                 message: HttpMessageEnum.OK,
@@ -129,7 +162,9 @@ class AuthController {
 
     public async forgotPassword(req: IRequest, res: IResponse<string>, next: NextFunction): Promise<IResponse<string> | undefined> {
         try {
-            const { nickName, id, role } = req.user as Users;
+            const {
+                nickName, id, role, email,
+            } = req.user as Users;
 
             const forgotGeneratedAndSaved = await authService.forgotPassword({ id, nickName, role });
 
@@ -144,7 +179,9 @@ class AuthController {
 
             const { forgotToken, clientKey } = forgotGeneratedAndSaved as IForgotToken;
 
-            console.log(forgotToken, clientKey);
+            await emailService.sendEmail(email, EmailEnum.FORGOT_PASSWORD, {
+                nickName, clientKey, forgotToken, forgotTime: mainConfig.EXPIRES_IN_FORGOT_PASSWORD,
+            });
 
             return res.status(HttpStatusEnum.OK).json({
                 status: HttpStatusEnum.OK,
@@ -158,13 +195,14 @@ class AuthController {
 
     public async changePassword(req: IRequest, res: IResponse<string>, next: NextFunction): Promise<IResponse<string> | undefined> {
         try {
-            const {password} = req.password as any;
-            const {id} = req.payload as IPayload;
+            const password = req.password as string;
+            const clientKey = req.clientKey as string;
+            const { id } = req.payload as IPayload;
             console.log(password);
             console.log(id, ';;;;;;;;;;;;;;;;;');
 
             const changePassword = await userService.changePassword(Number(id), password);
-            console.log(changePassword,'chensdflfsd;')
+            console.log(changePassword, 'chensdflfsd;');
 
             if (!changePassword) {
                 next(new ErrorHandler(
@@ -174,6 +212,11 @@ class AuthController {
                 ));
                 return;
             }
+
+            await clientService.delete(clientKey);
+
+            const { email, nickName } = req.user as Users;
+            await emailService.sendEmail(email, EmailEnum.CHANGE_PASSWORD, { nickName });
 
             return res.status(HttpStatusEnum.OK)
                 .json({

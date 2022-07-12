@@ -35,13 +35,6 @@ class UserRepository {
     public async changePassword(id: number, password: string): Promise<UpdateResult> {
         return this.userRepository.update({ id }, { password });
     }
-    // public async changePassword(id: number, password: string): Promise<UpdateResult> {
-    //     console.log(id, password);
-    //     return this.userRepository.createQueryBuilder().update(Users).set({
-    //         password,
-    //     }).where('id = :id', { id })
-    //         .execute();
-    // }
 
     public async getAll(): Promise<Users[]> {
         return this.userRepository.createQueryBuilder('users')
@@ -51,6 +44,10 @@ class UserRepository {
             .leftJoinAndSelect('users.favorites', 'favorites')
             .leftJoinAndSelect('users.ratings', 'ratings')
             .getMany();
+    }
+
+    public async updateAvatar(id: number, pathFile: string): Promise<UpdateResult> {
+        return this.userRepository.update({ id }, { avatar: pathFile });
     }
 }
 

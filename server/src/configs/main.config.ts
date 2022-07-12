@@ -5,13 +5,13 @@ dotenv.config();
 export const mainConfig = {
     PORT: process.env.PORT || 5500,
 
+    NODE_ENVIRONMENT_VARIABLE: process.env.NODE_ENVIRONMENT_VARIABLE || 'dev',
+
     PG_NAME_DATABASE: process.env.PG_NAME_DATABASE || 'root',
     PG_USER_NAME_DATABASE: process.env.PG_USER_NAME_DATABASE || 'root',
     PG_HOST_DATABASE: process.env.PG_HOST_DATABASE || 'localhost',
     PG_PORT_DATABASE: process.env.PG_PORT_DATABASE || 5432,
     PG_PASSWORD_DATABASE: process.env.PG_PASSWORD_DATABASE || 'root',
-
-    DOMAIN_NAME: process.env.DOMAIN_NAME || 'https://my-library.ua/',
 
     PASSWORD_SALT_ROUNDS: process.env.PASSWORD_SALT_ROUNDS || 7,
 
@@ -28,6 +28,11 @@ export const mainConfig = {
 
     ROOT_EMAIL: process.env.ROOT_EMAIL,
     ROOT_EMAIL_PASSWORD: process.env.ROOT_EMAIL_PASSWORD,
+
+    DOMAIN_NAME: process.env.DOMAIN_NAME || 'https://my-domain.ua',
+    PROJECT_NAME: process.env.PROJECT_NAME || 'my-project',
+
+    CLOUD_DOMAIN_NAME: process.env.CLOUD_DOMAIN_NAME,
 
     S3_NAME: process.env.S3_NAME,
     S3_REGION: process.env.S3_REGION,

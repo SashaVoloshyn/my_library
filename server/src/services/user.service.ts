@@ -10,6 +10,10 @@ export class UserService {
         return userRepository.getOneByEmailOrNickName(data);
     }
 
+    public async getOneByEmail(email: string): Promise<Users | null> {
+        return userRepository.getOneByEmail(email);
+    }
+
     public async createOne(user: IUser): Promise<Users> {
         const { password } = user;
         const passwordHashed = await bcryptService.hashPassword(password);
@@ -21,6 +25,10 @@ export class UserService {
     public async changePassword(id: number, password: string): Promise<UpdateResult> {
         const hashPassword = await bcryptService.hashPassword(password);
         return userRepository.changePassword(id, hashPassword);
+    }
+
+    public async updateAvatar(id: number, pathFile: string): Promise<UpdateResult> {
+        return userRepository.updateAvatar(id, pathFile);
     }
 }
 export const userService = new UserService();

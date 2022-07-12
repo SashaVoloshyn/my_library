@@ -3,6 +3,7 @@ export * from './author.interface';
 export * from './book.interface';
 export * from './comment.interface';
 export * from './commonFields.interface';
+export * from './context-email.interface';
 export * from './favorite.interface';
 export * from './genre.interface';
 export * from './rating.interface';

@@ -6,6 +6,7 @@ export const errorMessageConstants = {
     clientKey: 'Неправильні дані, число ключа повино бути більше рівне нулю (>= 0), а тип ClientKeyEnum',
     userNotRegistration: 'ПОМИЛКА СЕРВЕРА: НЕ ВДАЛОСЯ ЗАПИСАТИ КОРИСТУВАЧА',
     authorization: 'Немає авторизованних данних',
+    fileMimetype: 'Неправильний формат файлу',
 
 };
 

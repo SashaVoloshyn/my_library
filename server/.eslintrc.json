@@ -30,6 +30,7 @@
         "no-unused-vars": "off",
         "no-underscore-dangle": "off",
         "consistent-return": "off",
+        "no-undef": "warn",
         "max-len": ["error", { "code": 700 }]
     },
     "settings": {
