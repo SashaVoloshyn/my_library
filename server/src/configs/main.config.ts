@@ -34,6 +34,9 @@ export const mainConfig = {
 
     CLOUD_DOMAIN_NAME: process.env.CLOUD_DOMAIN_NAME,
 
+    GOOGLE_SECRET_KEY: process.env.GOOGLE_SECRET_KEY,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+
     S3_NAME: process.env.S3_NAME,
     S3_REGION: process.env.S3_REGION,
     S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,

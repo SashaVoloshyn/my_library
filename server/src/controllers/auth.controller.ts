@@ -6,7 +6,9 @@ import {
     IRequest, IResponse, ITokenPair, IUser,
 } from '../interfaces';
 import { Users } from '../entities';
-import {authService, clientService, s3Service, userService} from '../services';
+import {
+    authService, clientService, s3Service, userService,
+} from '../services';
 import { ErrorHandler } from '../errors';
 import {
     EmailEnum, FileEnum, HttpMessageEnum, HttpStatusEnum, ItemTypeFileEnum, MessagesEnum,

@@ -7,7 +7,7 @@
       "test": "echo \"Error: no test specified\" && exit 1",
       "lint": "eslint --cache --ext .js,.ts src",
       "lint:fix": "npm run lint -- --fix",
-      "start": "rimraf dist && tsc-watch --onSuccess \"nodemon ./src/app.ts\"",
+      "start": "rimraf dist && copyfiles -f ./src/email-templates/*.* ./dist/email-templates && tsc-watch --onSuccess \"nodemon ./src/app.ts\"",
       "migration:run": "npx typeorm-ts-node-commonjs migration:run -d ./src/configs/ormconfig.ts",
       "migration:create": "typeorm migration:create ./src/migrations/fileName",
       "migration:revert": "typeorm-ts-node-commonjs -d ./src/ormconfig.ts migration:revert",
