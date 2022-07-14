@@ -7,14 +7,13 @@ import {
 } from '../interfaces';
 import { Users } from '../entities';
 import {
-    authService, clientService, s3Service, userService,
+    authService, clientService, emailService, s3Service, userService,
 } from '../services';
 import { ErrorHandler } from '../errors';
 import {
     EmailEnum, FileEnum, HttpMessageEnum, HttpStatusEnum, ItemTypeFileEnum, MessagesEnum,
 } from '../enums';
 import { emailMessagesConstant, errorMessageConstants } from '../constants';
-import { emailService } from '../services/email.service';
 import { mainConfig } from '../configs';
 
 class AuthController {
@@ -200,11 +199,8 @@ class AuthController {
             const password = req.password as string;
             const clientKey = req.clientKey as string;
             const { id } = req.payload as IPayload;
-            console.log(password);
-            console.log(id, ';;;;;;;;;;;;;;;;;');
 
             const changePassword = await userService.changePassword(Number(id), password);
-            console.log(changePassword, 'chensdflfsd;');
 
             if (!changePassword) {
                 next(new ErrorHandler(

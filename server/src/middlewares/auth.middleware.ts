@@ -251,7 +251,6 @@ class AuthMiddleware {
             }
 
             req.payload = { nickName, role, id };
-            console.log(req.payload, 'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP');
             next();
         } catch (e) {
             next(e);
@@ -359,7 +358,6 @@ class AuthMiddleware {
     public isPassword(req: IRequest, _: IResponse<ITokenPair>, next: NextFunction): void {
         try {
             const { body } = req;
-            console.log(req.body);
             const { value, error } = passwordSchema.validate({ password: body?.password });
 
             if (error) {
@@ -379,8 +377,6 @@ class AuthMiddleware {
         try {
             const clientKey = req.clientKey as string;
             const forgotToken = await clientService.getKey(clientKey);
-
-            console.log(forgotToken);
 
             if (!forgotToken.length) {
                 next(new ErrorHandler(

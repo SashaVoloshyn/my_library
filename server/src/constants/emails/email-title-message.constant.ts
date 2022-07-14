@@ -1,4 +1,4 @@
-import { EmailEnum } from '../enums';
+import { EmailEnum } from '../../enums';
 
 export const emailTitleMessageConstant = {
     [EmailEnum.WELCOME]: 'дякуємо що стали частиною нашої спільноти.',

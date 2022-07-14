@@ -1,5 +1,5 @@
-import { EmailEnum } from '../enums';
-import { mainConfig } from '../configs';
+import { EmailEnum } from '../../enums';
+import { mainConfig } from '../../configs';
 
 export const emailTemplateConstant = {
     [EmailEnum.WELCOME]: {
