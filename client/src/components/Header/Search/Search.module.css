@@ -1,10 +1,10 @@
 .header__form_search form input {
-    width: 350px;
+    width: 500px;
     height: 35px;
     box-sizing: border-box;
     padding-left: 40px;
     border-radius: 20px;
-    font-size: 16px;
+    font-size: 20px;
     border: none;
 }
 
