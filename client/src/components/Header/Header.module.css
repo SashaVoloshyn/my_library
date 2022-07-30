@@ -1,0 +1,35 @@
+header {
+    height: 100px;
+    background-color: #FF5A6F;
+}
+
+.header__dark {
+    background-color: #323639;
+}
+
+.blur__bg  {
+    filter: blur(3px);
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5% 10%;
+}
+
+.header__container li, .header__container p, .header__container  a, .header__container  h1,
+.header__container h2, .header__container  h3, .header__container  h4, .header__container  h5,
+.header__container h6, .header__container  span {
+    color: white;
+}
+
+.header__container_nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50vw;
+    gap: 15px;
+    padding: 10px 0
+}

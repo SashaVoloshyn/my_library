@@ -1,0 +1,1 @@
+export const fileSizeUtil = (size) => size / 1024 / 1024;

@@ -1,0 +1,12 @@
+.header__logo {
+    width: 11vw
+}
+
+.header__logo img {
+    height: 70px;
+    width: 116px;
+}
+
+.header__logo:hover {
+    cursor: pointer;
+}

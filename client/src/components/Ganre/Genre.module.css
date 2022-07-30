@@ -1,0 +1,22 @@
+.header__nav_genres_typography {
+    display: flex;
+    flex-wrap: wrap;
+    width: fit-content;
+    max-width: 620px;
+    box-sizing: border-box;
+    padding: 40px;
+    gap: 20px;
+}
+
+.header__nav_genre {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    text-align: center;
+    justify-content: center;
+    background-color: #FF5A6F;
+}
+.header__nav_genre:hover {
+    cursor: pointer;
+    background-color: #fd3752;
+}

@@ -1,0 +1,33 @@
+nav {
+    width: 70%;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+nav ul li {
+    position: relative;
+    cursor: pointer;
+    line-height: 1; /*висота стрічки*/
+}
+
+nav ul li:after {
+    display: block;
+    position: absolute;
+    top: 25px;
+    left: 0; /*замінити на right:0;, для того що би змінити направлення підкреслення*/
+    width: 0;/*задаєм довжину лінії до наведення курсора*/
+    height: 2px; /*задаємо ширину лінії*/
+    background-color: white; /*задаём колір лінії*/
+    content: "";
+    transition: width 0.3s ease-out; /*задаємо час анімації*/
+}
+
+nav ul li:hover:after,
+nav ul li:focus:after {
+    width: 100%; /*ширина підкреслення текста*/
+}

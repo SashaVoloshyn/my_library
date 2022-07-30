@@ -1,0 +1,35 @@
+.header__auth_form {
+    position: absolute;
+    left: 33vw;
+    top: 20px;
+    display: flex;
+    padding-top: 4vw;
+    font-size: 18px;
+    align-items: center;
+    flex-direction: column;
+    height: 500px;
+    width: 500px;
+    max-width: 600px;
+    max-height: 600px;
+    z-index: 1;
+    border-radius: 20px;
+    background-color: yellow;
+}
+
+.header__auth_form_btn {
+    margin-top: 10px!important;
+}
+
+.header__auth_form_close_icon {
+    position: absolute;
+    top: 13px;
+    right: 15px;
+}
+
+.header__auth_form_close_icon:hover {
+    cursor: pointer;
+}
+
+.header__auth_form_close_icon:hover, .header__auth_form_span_error_message, .header__auth_form_warning_amber_icon {
+    color: red;
+}
