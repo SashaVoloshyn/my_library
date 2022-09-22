@@ -1,9 +1,7 @@
 import {
-    Entity, Column, ManyToMany, JoinTable,
+    Entity, Column,
 } from 'typeorm';
 
-import { Authors } from './authors.entity';
-import { Books } from './books.entity';
 import { CommonsFields } from './commons-fields.entity';
 
 @Entity()
@@ -16,12 +14,4 @@ export class Genres extends CommonsFields {
         nullable: false,
     })
         name: string;
-
-    @ManyToMany(() => Authors, (authors) => authors.genres)
-    @JoinTable()
-        authors: Authors[];
-
-    @ManyToMany(() => Books, (books) => books.genres)
-    @JoinTable()
-        books: Books[];
 }

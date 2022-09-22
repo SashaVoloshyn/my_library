@@ -57,16 +57,9 @@ export class Authors extends CommonsFields {
         country: string;
 
     @Column({
-        name: 'age',
-        type: 'int',
-        nullable: false,
-    })
-        age: number;
-
-    @Column({
         name: 'biography',
         type: 'varchar',
-        width: 255,
+        width: 8000,
         nullable: false,
     })
         biography: string;
@@ -84,7 +77,7 @@ export class Authors extends CommonsFields {
     @OneToMany(() => Books, (books) => books.author)
         books: Books[];
 
-    @ManyToMany(() => Genres, (genres) => genres.authors)
+    @ManyToMany(() => Genres)
     @JoinTable()
         genres: Genres[];
 }

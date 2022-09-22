@@ -1,5 +1,5 @@
 import {
-    Column, Entity, OneToMany, JoinColumn, ManyToOne, ManyToMany,
+    Column, Entity, OneToMany, JoinColumn, ManyToOne, ManyToMany, JoinTable,
 } from 'typeorm';
 
 import { AlreadyRead } from './already-read.entity';
@@ -22,9 +22,16 @@ export class Books extends CommonsFields {
         name: string;
 
     @Column({
+        name: 'yearOfRelease',
+        type: 'int',
+        nullable: true,
+    })
+        yearOfRelease?: number;
+
+    @Column({
         name: 'description',
         type: 'varchar',
-        width: 2000,
+        width: 8000,
         nullable: false,
         unique: true,
     })
@@ -34,10 +41,10 @@ export class Books extends CommonsFields {
         name: 'fileText',
         type: 'varchar',
         width: 255,
-        nullable: false,
+        nullable: true,
         unique: true,
     })
-        fileText: string;
+        fileText?: string;
 
     @Column({
         name: 'cover',
@@ -76,7 +83,8 @@ export class Books extends CommonsFields {
     @OneToMany(() => Comments, (comment) => comment.book)
         comments: Comments[];
 
-    @ManyToMany(() => Genres, (genres) => genres.books)
+    @ManyToMany(() => Genres)
+    @JoinTable()
         genres: Genres[];
 
     @OneToMany(() => Favorites, (favorites) => favorites.book)
