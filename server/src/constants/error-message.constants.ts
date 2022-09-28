@@ -10,6 +10,7 @@ export const errorMessageConstants = {
     fileSize: 'Розмір файла не валідний',
     duplicateNewPassword: 'Новий пароль збігається зі старим паролем!',
     badRequest: 'Погані данні',
+    notFound: 'Не знайдено.',
     genreAlreadyExists: 'Жанр вже існує!',
     authorAlreadyExists: 'Автор вже існує!',
     bookAlreadyExists: 'Книжка  вже існує!',

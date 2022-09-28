@@ -27,7 +27,16 @@ class GenresController {
             const { id } = req.params;
 
             const genre = await genreRepository.getOneById(Number(id)) as Genres;
-            console.log(genre,'ggggggggggggggggggg')
+            console.log(genre, 'ggggggggggggggggggg');
+
+            if (!genre) {
+                next(new ErrorHandler(
+                    errorMessageConstants.notFound,
+                    HttpStatusEnum.NOT_FOUND,
+                    HttpMessageEnum.NOT_FOUND,
+                ));
+                return;
+            }
 
             return res.status(HttpStatusEnum.OK).json({
                 status: HttpStatusEnum.OK,
