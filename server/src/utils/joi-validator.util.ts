@@ -49,8 +49,15 @@ class JoiValidatorUtil {
             .required()
             .messages(errorValidationMessageConst),
     });
+
+    public static genreSchema: Joi.ObjectSchema = Joi.object({
+        name: Joi.string()
+            .min(2)
+            .max(50)
+            .required(),
+    });
 }
 
 export const {
-    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema, emailSchema,
+    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema, emailSchema, genreSchema,
 } = JoiValidatorUtil;

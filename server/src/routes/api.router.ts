@@ -4,10 +4,12 @@ import {
 import { authRouter } from './auth.router';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
+import { genresRouter } from './genres.router';
 
 export const apiRouter = Router();
 
 apiRouter.use('/auth', authRouter);
+apiRouter.use('/genres', genresRouter);
 
 // @ts-ignore
 apiRouter.use('*', (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {

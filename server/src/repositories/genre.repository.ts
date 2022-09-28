@@ -1,3 +1,5 @@
+import { DeleteResult } from 'typeorm';
+
 import { AppDataSource } from '../configs';
 import { Genres } from '../entities';
 import { IGenre } from '../interfaces';
@@ -15,17 +17,23 @@ class GenreRepository {
 
     public async getAll(): Promise<Genres[]> {
         return this.genreRepository.createQueryBuilder('genres')
-            .leftJoinAndSelect('genres.authors', 'authors')
-            .leftJoinAndSelect('genres.books', 'books')
             .getMany();
     }
 
-    public async getOneById(id: number, limit: number): Promise<Genres | null> {
+    public async getOneById(id: number): Promise<Genres | null> {
         return this.genreRepository.createQueryBuilder('genres')
-            .leftJoinAndSelect('genres.books', 'books')
             .where('genres.id = :id', { id })
-            .limit(limit)
             .getOne();
+    }
+
+    public async getOneByName(name: string): Promise<Genres | null> {
+        return this.genreRepository.createQueryBuilder('genres')
+            .where('genres.name = :name', { name })
+            .getOne();
+    }
+
+    public async removeByName(name: string): Promise<DeleteResult> {
+        return this.genreRepository.delete({ name });
     }
 }
 

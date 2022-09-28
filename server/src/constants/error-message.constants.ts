@@ -1,12 +1,18 @@
 export const errorMessageConstants = {
     userAlreadyExists: 'Користувач вже існує.',
-    userNotFound: 'Вибачте, користувача не знайдено, будь ласка зареєструйтесь',
+    userNotFound: 'Користувача не знайдено. Зареєструйтесь, будь ласка.',
     unauthorized: 'Невірний email або пароль.',
     unknown: 'Невідома помилка',
-    clientKey: 'Неправильні дані, число ключа повино бути більше рівне нулю (>= 0), а тип ClientKeyEnum',
+    clientKey: 'Невірні данні, число ключа повинно бути більше рівне нулю (>= 0), а тип ClientKeyEnum',
     userNotRegistration: 'ПОМИЛКА СЕРВЕРА: НЕ ВДАЛОСЯ ЗАПИСАТИ КОРИСТУВАЧА',
-    authorization: 'Немає авторизованних данних',
-    fileMimetype: 'Неправильний формат файлу',
+    authorization: 'Немає авторизованих данних',
+    fileMimetype: 'Невірний формат файлу',
+    fileSize: 'Розмір файла не валідний',
+    duplicateNewPassword: 'Новий пароль збігається зі старим паролем!',
+    badRequest: 'Погані данні',
+    genreAlreadyExists: 'Жанр вже існує!',
+    authorAlreadyExists: 'Автор вже існує!',
+    bookAlreadyExists: 'Книжка  вже існує!',
 
 };
 
