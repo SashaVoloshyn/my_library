@@ -56,8 +56,71 @@ class JoiValidatorUtil {
             .max(50)
             .required(),
     });
+
+    public static authorSchema: Joi.ObjectSchema = Joi.object({
+        firstName: Joi.string()
+            .max(255)
+            .trim()
+            .messages(errorValidationMessageConst)
+            .required(),
+        lastName: Joi.string()
+            .max(255)
+            .trim()
+            .messages(errorValidationMessageConst)
+            .required(),
+        biography: Joi.string()
+            .trim()
+            .max(8000)
+            .messages(errorValidationMessageConst)
+            .required(),
+        country: Joi.string()
+            .trim()
+            .max(255)
+            .messages(errorValidationMessageConst)
+            .required(),
+        dateBirthday: Joi.date()
+            .messages(errorValidationMessageConst)
+            .required(),
+        dateDeath: Joi.date()
+            .allow(null)
+            .messages(errorValidationMessageConst)
+            .optional(),
+        photo: Joi.binary()
+            .allow(null)
+            .messages(errorValidationMessageConst)
+            .optional(),
+        pseudonym: Joi.string()
+            .allow(null)
+            .messages(errorValidationMessageConst)
+            .optional(),
+        genres: Joi.alternatives()
+            .try(Joi.array().items(Joi.number()), Joi.number())
+            .messages(errorValidationMessageConst)
+            .required(),
+    });
+
+    public static authorPathSchema: Joi.ObjectSchema = Joi.object({
+        dateDeath: Joi.date()
+            .messages(errorValidationMessageConst)
+            .optional(),
+        photo: Joi.binary()
+            .messages(errorValidationMessageConst)
+            .optional(),
+        pseudonym: Joi.string()
+            .messages(errorValidationMessageConst)
+            .optional(),
+        biography: Joi.string()
+            .trim()
+            .max(8000)
+            .messages(errorValidationMessageConst)
+            .optional(),
+        genres: Joi.alternatives()
+            .try(Joi.array().items(Joi.number()), Joi.number())
+            .messages(errorValidationMessageConst)
+            .optional(),
+    });
 }
 
 export const {
-    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema, emailSchema, genreSchema,
+    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema, emailSchema, genreSchema, authorSchema, authorPathSchema,
 } = JoiValidatorUtil;

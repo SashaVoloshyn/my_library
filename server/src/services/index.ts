@@ -1,4 +1,5 @@
 export * from './auth.service';
+export * from './author.service';
 export * from './bcrypt.service';
 export * from './client.service';
 export * from './email.service';

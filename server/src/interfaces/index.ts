@@ -18,3 +18,7 @@ export * from './response/response.interface';
 // request
 
 export * from './request/request.interface';
+
+// query
+
+export * from './queryParams/page.interface';

@@ -12,7 +12,29 @@ class FileUploadMiddleware {
             fileFilter(_: IRequest, file: Express.Multer.File, callback: multer.FileFilterCallback) {
                 if (!filesMimetypeConstant[FileEnum.PHOTOS].includes(file.mimetype)) {
                     return callback(
-                        new ErrorHandler(errorMessageConstants.fileMimetype, HttpStatusEnum.BAD_REQUEST, HttpMessageEnum.BAD_REQUEST),
+                        new ErrorHandler(
+                            errorMessageConstants.fileMimetype,
+                            HttpStatusEnum.BAD_REQUEST,
+                            HttpMessageEnum.BAD_REQUEST,
+                        ),
+                    );
+                }
+                callback(null, true);
+            },
+        });
+    }
+
+    public static authorPhoto(): multer.Multer {
+        return multer({
+            limits: { fileSize: fileSizeConstant.SIZE_AUTHOR_PHOTO },
+            fileFilter(_: IRequest, file: Express.Multer.File, callback: multer.FileFilterCallback) {
+                if (!filesMimetypeConstant[FileEnum.PHOTOS].includes(file.mimetype)) {
+                    return callback(
+                        new ErrorHandler(
+                            errorMessageConstants.fileMimetype,
+                            HttpStatusEnum.BAD_REQUEST,
+                            HttpMessageEnum.BAD_REQUEST,
+                        ),
                     );
                 }
                 callback(null, true);
@@ -20,4 +42,4 @@ class FileUploadMiddleware {
         });
     }
 }
-export const { userAvatar } = FileUploadMiddleware;
+export const { userAvatar, authorPhoto } = FileUploadMiddleware;

@@ -5,7 +5,25 @@ export interface IAuthor {
     dateBirthday: string,
     dateDeath?: string,
     country: string,
-    age: number,
     biography: string,
-    photo?: string
+    photo?: string,
+    genres: number[];
+}
+
+export interface IAuthorCreate {
+    author: IAuthor,
+    genresId: number[] | number
+}
+
+export interface IAuthorNewFields {
+    dateDeath?: string,
+    photo?: string,
+    pseudonym?: string,
+    genres?: number[] | number,
+    biography?: string,
+}
+
+export interface IAuthorPatch {
+    id: number,
+    newFields: IAuthorNewFields
 }

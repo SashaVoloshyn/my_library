@@ -27,7 +27,6 @@ class GenresController {
             const { id } = req.params;
 
             const genre = await genreRepository.getOneById(Number(id)) as Genres;
-            console.log(genre, 'ggggggggggggggggggg');
 
             if (!genre) {
                 next(new ErrorHandler(

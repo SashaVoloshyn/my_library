@@ -5,11 +5,13 @@ import { authRouter } from './auth.router';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
 import { genresRouter } from './genres.router';
+import { authorsRouter } from './authors.router';
 
 export const apiRouter = Router();
 
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/genres', genresRouter);
+apiRouter.use('/authors', authorsRouter);
 
 // @ts-ignore
 apiRouter.use('*', (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {

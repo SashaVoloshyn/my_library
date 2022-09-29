@@ -36,6 +36,17 @@ class S3Service {
             .promise();
     }
 
+    public async deleteFile(filePath: string): Promise<void> {
+        /*
+            where value for 'Key' equals 'pathName1/pathName2/.../pathNameN/fileName.ext'
+            - full path name to your file without '/' at the beginning
+        */
+        const filePathSlice = filePath.slice(1);
+        await this.Bucket.deleteObject({ Bucket: mainConfig.S3_NAME!, Key: filePathSlice }, (err) => {
+            if (err) console.error(err);
+        }).promise();
+    }
+
     private _pathBuilder(fileName: string, itemId: string, fileType: FileEnum, itemType: ItemTypeFileEnum): string {
         const fileExpansion = path.extname(fileName);
         const newFileName = this.uuidv4() + fileExpansion;
