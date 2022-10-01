@@ -119,8 +119,43 @@ class JoiValidatorUtil {
             .messages(errorValidationMessageConst)
             .optional(),
     });
+
+    public static bookSchema: Joi.ObjectSchema = Joi.object({
+        name: Joi.string()
+            .messages(errorValidationMessageConst)
+            .min(1)
+            .max(255)
+            .required(),
+        yearOfRelease: Joi.number()
+            .messages(errorValidationMessageConst)
+            .max(1300)
+            .max(new Date().getFullYear())
+            .optional(),
+        description: Joi.string()
+            .messages(errorValidationMessageConst)
+            .min(100)
+            .max(8000)
+            .required(),
+        fileText: Joi.binary()
+            .messages(errorValidationMessageConst)
+            .optional(),
+        cover: Joi.binary()
+            .messages(errorValidationMessageConst)
+            .optional(),
+        fileAudio: Joi.binary()
+            .messages(errorValidationMessageConst)
+            .optional(),
+        authorId: Joi.number()
+            .messages(errorValidationMessageConst)
+            .required(),
+        genres: Joi.alternatives()
+            .try(Joi.array().items(Joi.number()), Joi.number())
+            .messages(errorValidationMessageConst)
+            .optional(),
+    });
 }
 
 export const {
-    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema, emailSchema, genreSchema, authorSchema, authorPathSchema,
+    userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema,
+    emailSchema, genreSchema, authorSchema, authorPathSchema, bookSchema,
 } = JoiValidatorUtil;

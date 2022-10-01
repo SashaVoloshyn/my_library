@@ -22,3 +22,7 @@ export * from './request/request.interface';
 // query
 
 export * from './queryParams/page.interface';
+
+// file
+
+export * from './file-extended.interface';

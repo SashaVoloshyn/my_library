@@ -1,6 +1,7 @@
+import { DeleteResult, UpdateResult } from 'typeorm';
+
 import { AppDataSource } from '../configs';
 import { Books } from '../entities';
-import { IBook } from '../interfaces';
 
 class BookRepository {
     bookRepository;
@@ -9,14 +10,12 @@ class BookRepository {
         this.bookRepository = AppDataSource.getRepository(Books);
     }
 
-    public async createOne(book: IBook): Promise<Books> {
-        const id = [] as any;
-        book.genres.forEach((genre) => id.push({ id: genre }));
-        return this.bookRepository.save({ ...book, genres: id });
+    public async createOne(book: Books): Promise<Books> {
+        return this.bookRepository.save(book);
     }
 
-    public async getOneByEmailOrNickName(): Promise<Books[] | null> {
-        return this.bookRepository.find();
+    public async updateOne(id: number, updateFields: Partial<Books>): Promise<Books | UpdateResult> {
+        return this.bookRepository.update({ id }, { ...updateFields });
     }
 
     public async getAll(): Promise<Books[]> {
@@ -29,6 +28,26 @@ class BookRepository {
             .leftJoinAndSelect('books.author', 'author')
             .leftJoinAndSelect('books.ratings', 'ratings')
             .getMany();
+    }
+
+    public async getOneById(id: number): Promise<Books | null> {
+        return this.bookRepository.findOne({
+            where: { id },
+            relations: {
+                genres: true,
+                comments: true,
+                ratings: true,
+                author: true,
+            },
+        });
+    }
+
+    public async getOneByDescription(description: string): Promise<Books | null> {
+        return this.bookRepository.findOneBy({ description });
+    }
+
+    public async deleteOne(id: number): Promise<DeleteResult> {
+        return this.bookRepository.delete({ id });
     }
 }
 

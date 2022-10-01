@@ -10,13 +10,13 @@ import { IRating } from '../rating.interface';
 import { IUser } from '../user.interface';
 import { IWillRead } from '../will-read.interface';
 import { IPayload } from '../token.interface';
-import { Authors, Users } from '../../entities';
+import { Authors, Books, Users } from '../../entities';
 
 export interface IRequest extends Request{
     alreadyReadBook?: IAlreadyRead,
     author?: IAuthor | Authors,
     authorPatch?: IAuthorNewFields,
-    book?: IBook,
+    book?: IBook | Books,
     comment?: IComment,
     favorite?: IFavorite,
     genre?: IGenre,
