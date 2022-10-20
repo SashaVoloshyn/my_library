@@ -2,6 +2,7 @@ export * from './client.enum';
 export * from './email.enum';
 export * from './file.enum';
 export * from './item-type-file.enum';
+export * from './files-upload-fields.enum';
 export * from './http-message.enum';
 export * from './http-status.enum';
 export * from './node-environment.enum';

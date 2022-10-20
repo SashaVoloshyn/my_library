@@ -6,12 +6,14 @@ import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
 import { genresRouter } from './genres.router';
 import { authorsRouter } from './authors.router';
+import {booksRouter} from "./books.router";
 
 export const apiRouter = Router();
 
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/genres', genresRouter);
 apiRouter.use('/authors', authorsRouter);
+apiRouter.use('/books', booksRouter);
 
 // @ts-ignore
 apiRouter.use('*', (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {

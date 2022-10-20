@@ -16,6 +16,7 @@
    "author": "",
    "license": "ISC",
    "dependencies": {
+      "@google-cloud/storage": "^6.5.0",
       "aws-sdk": "^2.1162.0",
       "bcrypt": "^5.0.1",
       "dayjs": "^1.11.3",

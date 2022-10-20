@@ -45,6 +45,7 @@ class BookMiddleware {
             }
 
             req.book = value;
+            console.log(value);
             next();
         } catch (e) {
             next(e);

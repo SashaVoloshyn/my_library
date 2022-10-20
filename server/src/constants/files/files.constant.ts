@@ -1,4 +1,4 @@
-import { FileEnum } from '../../enums';
+import { FileEnum, FilesUploadFieldsEnum } from '../../enums';
 
 export const filesMimetypeConstant = {
     [FileEnum.PHOTOS]: [
@@ -7,13 +7,11 @@ export const filesMimetypeConstant = {
         'image/png', //  PNG
         'image/webp', // WEBP
     ],
-    [FileEnum.APPLICATION]: [
+    [FileEnum.TEXTS]: [
+        'text/plain', // TXT
         'application/pdf', // PDF
         'application/epub+zip', // EPUB
         'application/rtf', // RTF
-    ],
-    [FileEnum.TEXTS]: [
-        'text/plain', // TXT
     ],
     [FileEnum.AUDIOS]: [
         'audio/mp4', // MP4
@@ -29,3 +27,9 @@ export const fileSizeConstant = {
     SIZE_BOOK_TEXT_FILE: 5 * 1024 * 1024,
     SIZE_AUDIO_BOOK: 10 * 1024 * 1024,
 };
+
+export const filesUploadFields = [
+    { name: FilesUploadFieldsEnum.FILE_TEXT, maxCount: 1 },
+    { name: FilesUploadFieldsEnum.COVER, maxCount: 1 },
+    { name: FilesUploadFieldsEnum.FILE_AUDIO, maxCount: 1 },
+];
