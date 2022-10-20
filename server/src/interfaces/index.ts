@@ -9,6 +9,7 @@ export * from './genre.interface';
 export * from './rating.interface';
 export * from './token.interface';
 export * from './user.interface';
+export * from './view.interface';
 export * from './will-read.interface';
 export * from './like.interface';
 

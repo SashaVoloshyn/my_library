@@ -14,6 +14,9 @@ export const errorMessageConstants = {
     genreAlreadyExists: 'Жанр вже існує!',
     authorAlreadyExists: 'Автор вже існує!',
     bookAlreadyExists: 'Книжка  вже існує!',
+    viewsForBookExists: 'Перегляди для цієї книги вже існують!',
+    commentAlreadyExists: 'Коментар вже було додано!',
+    flood: 'Перестаньте флудити!',
 
 };
 

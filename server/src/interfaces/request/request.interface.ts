@@ -11,6 +11,7 @@ import { IUser } from '../user.interface';
 import { IWillRead } from '../will-read.interface';
 import { IPayload } from '../token.interface';
 import { Authors, Books, Users } from '../../entities';
+import { IView } from '../view.interface';
 
 export interface IRequest extends Request{
     alreadyReadBook?: IAlreadyRead,
@@ -30,5 +31,9 @@ export interface IRequest extends Request{
     password?: string,
     clientKey?: string,
     pageQuery?: number,
+    bookId?: string;
+    generateKey?: string;
+    views?: IView;
+    err?: string | null,
 
 }

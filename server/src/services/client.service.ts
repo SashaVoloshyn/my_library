@@ -42,6 +42,13 @@ class ClientService {
         if (type === ClientEnum.FORGOTTOKEN) {
             clientKey = `${ClientEnum.FORGOTTOKEN}:${nickName}:${uuidv4()}`;
         }
+        if (type === ClientEnum.ACTIONS_LIKES) {
+            clientKey = `${ClientEnum.ACTIONS_LIKES}:${nickName}:${uuidv4()}`;
+        }
+        if (type === ClientEnum.VIEWS_COUNT_BOOK) {
+            const bookId = nickName;
+            clientKey = `${ClientEnum.VIEWS_COUNT_BOOK}:${bookId}`;
+        }
 
         return clientKey;
     }

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { joiCommonValidator } from './joi-common-validator';
-import { errorValidationMessageConst } from '../constants';
+import { errorValidationMessageConst, regexConstant } from '../constants';
 
 class JoiValidatorUtil {
     public static userSchema: Joi.ObjectSchema = Joi.object({
@@ -153,9 +153,30 @@ class JoiValidatorUtil {
             .messages(errorValidationMessageConst)
             .optional(),
     });
+
+    public static viewFirstCreateSchema: Joi.ObjectSchema = Joi.object({
+        bookId: Joi.number()
+            .messages(errorValidationMessageConst)
+            .required(),
+    });
+
+    public static commentSchema: Joi.ObjectSchema = Joi.object({
+        bookId: Joi.number()
+            .messages(errorValidationMessageConst)
+            .required(),
+        text: Joi.string()
+            .trim()
+            .messages(errorValidationMessageConst)
+            .regex(regexConstant.BAD_WORDS, { invert: true })
+            .required(),
+        clientKey: joiCommonValidator.clientKey
+            .required()
+            .messages(errorValidationMessageConst),
+    });
 }
 
 export const {
     userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema,
     emailSchema, genreSchema, authorSchema, authorPathSchema, bookSchema,
+    viewFirstCreateSchema, commentSchema,
 } = JoiValidatorUtil;

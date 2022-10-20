@@ -1,12 +1,14 @@
 import {
     Request, Response, NextFunction, Router,
 } from 'express';
+
 import { authRouter } from './auth.router';
 import { HttpMessageEnum, HttpStatusEnum } from '../enums';
 import { ErrorHandler } from '../errors';
 import { genresRouter } from './genres.router';
 import { authorsRouter } from './authors.router';
-import {booksRouter} from "./books.router";
+import { booksRouter } from './books.router';
+import { viewsRouter } from './views.router';
 
 export const apiRouter = Router();
 
@@ -14,6 +16,7 @@ apiRouter.use('/auth', authRouter);
 apiRouter.use('/genres', genresRouter);
 apiRouter.use('/authors', authorsRouter);
 apiRouter.use('/books', booksRouter);
+apiRouter.use('/views', viewsRouter);
 
 // @ts-ignore
 apiRouter.use('*', (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {

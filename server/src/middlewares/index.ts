@@ -3,3 +3,4 @@ export * from './author.middleware';
 export * from './book.middleware';
 export * from './file-upload.middleware';
 export * from './genre.middleware';
+export * from './view.middleware';
