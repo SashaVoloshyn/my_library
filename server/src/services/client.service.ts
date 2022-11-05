@@ -1,7 +1,7 @@
 import { createClient } from 'redis';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ClientEnum } from '../enums/client.enum';
+import { ClientEnum } from '../enums';
 
 class ClientService {
     client;
@@ -33,7 +33,7 @@ class ClientService {
         return this.client.keys(`*${type}:${nickName}*`);
     }
 
-    public generateClientKey(nickName:string, type: ClientEnum) : string {
+    public generateClientKey(nickName:string, type: ClientEnum, additionalKey?: string) : string {
         let clientKey = '';
 
         if (type === ClientEnum.AUTHTOKEN) {
@@ -43,7 +43,7 @@ class ClientService {
             clientKey = `${ClientEnum.FORGOTTOKEN}:${nickName}:${uuidv4()}`;
         }
         if (type === ClientEnum.ACTIONS_LIKES) {
-            clientKey = `${ClientEnum.ACTIONS_LIKES}:${nickName}:${uuidv4()}`;
+            clientKey = `${ClientEnum.ACTIONS_LIKES}:${additionalKey}:${nickName}`;
         }
         if (type === ClientEnum.VIEWS_COUNT_BOOK) {
             const bookId = nickName;

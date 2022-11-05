@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { IAlreadyRead } from '../already-read.interface';
 import { IAuthor, IAuthorNewFields } from '../author.interface';
 import { IBook } from '../book.interface';
-import { IComment } from '../comment.interface';
+import { ICommentLikes, ICommentLikesCreate, ICommentRequest } from '../comment.interface';
 import { IFavorite } from '../favorite.interface';
 import { IGenre } from '../genre.interface';
 import { IRating } from '../rating.interface';
@@ -12,13 +12,15 @@ import { IWillRead } from '../will-read.interface';
 import { IPayload } from '../token.interface';
 import { Authors, Books, Users } from '../../entities';
 import { IView } from '../view.interface';
+import { IPagination } from '../pagination.interface';
 
 export interface IRequest extends Request{
     alreadyReadBook?: IAlreadyRead,
     author?: IAuthor | Authors,
     authorPatch?: IAuthorNewFields,
     book?: IBook | Books,
-    comment?: IComment,
+    commentLikes?: ICommentLikes | ICommentLikesCreate,
+    comment?: ICommentRequest,
     favorite?: IFavorite,
     genre?: IGenre,
     rating?: IRating,
@@ -28,6 +30,7 @@ export interface IRequest extends Request{
     authorizatePassword?: string
     authorization?: string,
     email?: string,
+    pagination?: IPagination;
     password?: string,
     clientKey?: string,
     pageQuery?: number,

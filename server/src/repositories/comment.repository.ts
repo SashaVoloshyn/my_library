@@ -9,12 +9,26 @@ class CommentRepository {
         this.commentRepository = AppDataSource.getRepository(Comments);
     }
 
+    public async getAllWithPagination(skip: number, take: number): Promise<Comments[]> {
+        return this.commentRepository.find({ skip, take, relations: { user: true } });
+    }
+
+    public async getAll(): Promise<Comments[]> {
+        return this.commentRepository.find();
+    }
+
     public async createOne(comment: IComment): Promise<Comments> {
+        // @ts-ignore
         return this.commentRepository.save(comment);
     }
 
-    public async getOneByEmailOrNickName(): Promise<Comments[] | null> {
-        return this.commentRepository.find();
+    public async getAllByUserIdAndBookId(bookId: number, userId: number): Promise<Comments[] | null> {
+        // @ts-ignore
+        return this.commentRepository.find({ where: { bookId, userId } });
+    }
+
+    public async getOneById(commentId: number): Promise<Comments | null> {
+        return this.commentRepository.findOneBy({ id: commentId });
     }
 }
 

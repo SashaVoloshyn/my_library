@@ -4,7 +4,7 @@ import { mainConfig } from '../configs';
 import { IForgotToken, IPayload, ITokenPair } from '../interfaces';
 import { constants } from '../constants';
 import { clientService } from './client.service';
-import { ClientEnum } from '../enums/client.enum';
+import { ClientEnum } from '../enums';
 import { Users } from '../entities';
 
 class JwtService {

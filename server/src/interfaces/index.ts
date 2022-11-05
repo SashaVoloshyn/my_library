@@ -12,6 +12,7 @@ export * from './user.interface';
 export * from './view.interface';
 export * from './will-read.interface';
 export * from './like.interface';
+export * from './pagination.interface';
 
 // response
 export * from './response/response.interface';
@@ -23,6 +24,7 @@ export * from './request/request.interface';
 // query
 
 export * from './queryParams/page.interface';
+export * from './queryParams/pagination.query.interface';
 
 // file
 

@@ -9,6 +9,7 @@ import { genresRouter } from './genres.router';
 import { authorsRouter } from './authors.router';
 import { booksRouter } from './books.router';
 import { viewsRouter } from './views.router';
+import { commentsRouter } from './comments.router';
 
 export const apiRouter = Router();
 
@@ -17,6 +18,7 @@ apiRouter.use('/genres', genresRouter);
 apiRouter.use('/authors', authorsRouter);
 apiRouter.use('/books', booksRouter);
 apiRouter.use('/views', viewsRouter);
+apiRouter.use('/comments', commentsRouter);
 
 // @ts-ignore
 apiRouter.use('*', (err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {

@@ -97,6 +97,7 @@ class AuthMiddleware {
     public async authorization(req: IRequest, _: Response, next: NextFunction): Promise<void> {
         try {
             const authorization = req.get(constants.AUTHORIZATION) as string;
+            console.log(authorization, ' autoripftion');
 
             if (!authorization) {
                 next(new ErrorHandler(
@@ -143,6 +144,7 @@ class AuthMiddleware {
         try {
             const authorization = req.authorization as string;
             const bearer = authorization.split(' ')[0];
+            console.log(bearer, 'berrer');
 
             if (bearer !== constants.BEARER) {
                 next(new ErrorHandler(
@@ -163,6 +165,7 @@ class AuthMiddleware {
         try {
             const authorization = req.authorization as string;
             const token = authorization.split(' ')[1];
+            console.log(token, 'tooooken');
 
             if (!token) {
                 next(new ErrorHandler(
@@ -205,6 +208,7 @@ class AuthMiddleware {
             }
 
             req.payload = { nickName };
+            console.log(nickName, 'nickNammemrwe');
             next();
         } catch (e) {
             next(e);
@@ -273,6 +277,7 @@ class AuthMiddleware {
                 );
                 return;
             }
+            console.log('keyfrom ddddbbbb');
 
             next();
         } catch (e) {
@@ -292,6 +297,7 @@ class AuthMiddleware {
             }
 
             req.user = user;
+            console.log(user,'uusususuer');
             next();
         } catch (e) {
             next(e);

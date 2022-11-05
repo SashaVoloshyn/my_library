@@ -173,10 +173,37 @@ class JoiValidatorUtil {
             .required()
             .messages(errorValidationMessageConst),
     });
+
+    public static commentActionsSchema: Joi.ObjectSchema = Joi.object({
+        disLike: Joi.number().min(0).max(1)
+            .required()
+            .messages(errorValidationMessageConst),
+        like: Joi.number().min(0).max(1)
+            .required()
+            .messages(errorValidationMessageConst),
+        clientKey: joiCommonValidator.clientKey
+            .required()
+            .messages(errorValidationMessageConst),
+        commentId: Joi.number()
+            .required()
+            .messages(errorValidationMessageConst),
+    });
+
+    public static commentUpdateActionsSchema: Joi.ObjectSchema = Joi.object({
+        disLike: Joi.number().min(0).max(1)
+            .optional()
+            .messages(errorValidationMessageConst),
+        like: Joi.number().min(0).max(1)
+            .optional()
+            .messages(errorValidationMessageConst),
+        clientKey: joiCommonValidator.clientKey
+            .required()
+            .messages(errorValidationMessageConst),
+    });
 }
 
 export const {
     userSchema, loginSchema, tokenSchema, clientKeySchema, passwordSchema,
     emailSchema, genreSchema, authorSchema, authorPathSchema, bookSchema,
-    viewFirstCreateSchema, commentSchema,
+    viewFirstCreateSchema, commentSchema, commentActionsSchema, commentUpdateActionsSchema,
 } = JoiValidatorUtil;
